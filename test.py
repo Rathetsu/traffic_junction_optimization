@@ -28,7 +28,7 @@ class WebSocketClient:
         self.uri = uri
         self.password = power_mod(password, e, n)
         self.state = None
-        self.agent = FixedCycleAgent()
+        self.agent = Agent()
 
     async def start_testing(self):
         while True:
