@@ -15,9 +15,9 @@ from agent import Agent
 from sumo_utils import run_episode
 from gen_sim import gen_sim
 
-NUM_EPISODES = 10  # Number of complete simulation runs
+NUM_EPISODES = 100  # Number of complete simulation runs
 COMPETITION_ROUND = 2  # 1 or 2, depending on which competition round you are in
-random.seed(COMPETITION_ROUND)
+np.random.seed(COMPETITION_ROUND)
 
 """
 state = [curr_open_dir, 8*detector(waiting times)]
@@ -47,8 +47,11 @@ if __name__ == "__main__":
         # Generate an episode with the specified probabilities for lanes in the intersection
         # Returns the number of vehicles that will be generated in the episode
         vehicles = gen_sim('', round=COMPETITION_ROUND,
-                           p_west_east=0.3, p_east_west=0.2,
-                           p_north_south=0.2, p_south_north=0.1)
+                           p_west_east=np.random.rand(),
+                           p_east_west=np.random.rand(),
+                           p_north_south=np.random.rand(),
+                           p_south_north=np.random.rand(),
+                           )
 
         print('Starting Episode ' + str(e) + '...')
 
