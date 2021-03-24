@@ -6,8 +6,6 @@ from json import loads
 import websockets
 import numpy as np
 from agent import Agent
-from modulo import power_mod
-from agent import FixedCycleAgent
 
 SEND_STRING = "{}&{}&{}"
 

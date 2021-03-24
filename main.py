@@ -11,10 +11,9 @@ from sumolib import checkBinary  # noqa
 import traci  # noqa
 import random
 
-from agent import Agent , FixedCycleAgent
+from agent import Agent
 from sumo_utils import run_episode
 from gen_sim import gen_sim
-from stable_baselines3 import PPO
 
 NUM_EPISODES = 10  # Number of complete simulation runs
 COMPETITION_ROUND = 2  # 1 or 2, depending on which competition round you are in
@@ -41,7 +40,7 @@ if __name__ == "__main__":
 
     # sumoBinary = checkBinary('sumo-gui')
 
-    agent = PPO.load('PPO')  # Instantiate your agent object
+    agent = Agent()  # Instantiate your agent object
     waiting_time_per_episode = []  # A list to hold the average waiting time per vehicle returned from every episode
 
     for e in range(NUM_EPISODES):
@@ -74,4 +73,3 @@ if __name__ == "__main__":
         print('episode[' + str(e) + '] Average waiting time = ' + str(avg_waiting_time)
               + ' (s) -- Average Emissions (CO2) = ' + str(avg_emissions) + "(g)")
     print(np.mean(waiting_time_per_episode))
-© 2021 GitHub, Inc.

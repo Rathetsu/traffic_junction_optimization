@@ -253,9 +253,9 @@ def run_episode(conn, agent, competition_round, train=True):
                       + conn.lane.getLastStepVehicleIDs("3i_0")
         if agent is not None:
             if train:
-                action ,_  = agent.predict(state, conn, vehicle_ids)
+                action = agent.select_action(state)
             else:
-                action,_ = agent.predict(state)
+                action = agent.select_action(state)
             if (competition_round == 2 and action not in range(0, 4)) or \
                     (competition_round == 1 and action not in range(0, 2)):
                 print("Agent returned an invalid action")
