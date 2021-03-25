@@ -5,6 +5,7 @@ from json import loads
 
 import websockets
 import numpy as np
+from modulo import power_mod
 from agent import Agent
 
 SEND_STRING = "{}&{}&{}"
