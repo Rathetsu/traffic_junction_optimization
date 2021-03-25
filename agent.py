@@ -61,7 +61,7 @@ class Agent:
                 or (i in [2, 6] and state[0] == 0) \
                 or (i in [3, 7] and state[0] == 3) \
                 or (i in [4, 8] and state[0] == 1):
-                    state[i] == 0
+                    state[i] = 0
 
         for i in range(1, 9):
             if state[i] == -1 and self.prev_state != None:
