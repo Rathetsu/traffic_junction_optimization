@@ -2,7 +2,7 @@ import random
 
 YELLOW_TIME = 6
 TOTAL_HOLD = 12
-sigma = 20
+sigma = 30
 taw = 7
 
 
@@ -20,10 +20,10 @@ class Agent:
 
         if self.action == None:
             self.action = state[0]
-        
+
         self.curr_state = self.handle_faulty_sensors(state)
-        
-        print(self.curr_state)
+
+        #print(self.curr_state)
 
         self.time_counter += 1
 
@@ -31,14 +31,13 @@ class Agent:
             self.action = self.act(self.curr_state)
             if self.prev_action != self.action:
                 self.time_counter = 0
-            
+
         self.prev_state = self.curr_state
         self.prev_action_was_flip = True if self.prev_action != None and self.prev_action != self.action else False
         self.prev_action = self.action
 
-        print('-----------', self.action, '-----------')
+        #print('__________', self.action, '__________')
         return self.action
-
 
     def act(self, state):
 
@@ -54,30 +53,32 @@ class Agent:
 
         action = lane_weights.index(max(lane_weights))
         return action
-    
+
     def handle_faulty_sensors(self, state):
 
         for i in range(1, 9):
             if state[i] == -1:
                 if (i in [1, 5] and state[0] == 0) \
-                or (i in [2, 6] and state[0] == 2) \
-                or (i in [3, 7] and state[0] == 1) \
-                or (i in [4, 8] and state[0] == 3):
+                        or (i in [2, 6] and state[0] == 2) \
+                        or (i in [3, 7] and state[0] == 1) \
+                        or (i in [4, 8] and state[0] == 3):
                     state[i] = 0
 
         for i in range(1, 9):
             if state[i] == -1 and self.prev_state == None:
                 state[i] = 0
-                return state
             if state[i] == -1 and self.prev_state != None:
                 if i >= 5 and state[i - 4] == 0:
                     state[i] = 0
-                    return state
-                if i >= 5 and state[i - 4] != 0 and self.prev_state[i] == 0:
+                elif i >= 5 and state[i - 4] != 0 and self.prev_state[i] == 0:
+                    state[i] = 6 if int(self.prev_action_was_flip) else 3
+                elif i < 5 and self.prev_state[i] == 0:
                     state[i] = 0
-                    return state
-                if self.prev_state[i] != 0:
+                elif self.prev_state[i] != 0:
                     state[i] = self.prev_state[i] + 6 + 6 * int(self.prev_action_was_flip)
-                    return state
 
         return state
+    
+    def max_close(self, state):
+        close_detectors = state[1:5]
+        return max(close_detectors)
