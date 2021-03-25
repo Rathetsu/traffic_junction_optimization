@@ -4,7 +4,7 @@ YELLOW_TIME = 6
 TOTAL_HOLD = 12
 sigma = 3
 alpha = 2
-taw = 7
+taw = 6
 
 
 class Agent:
@@ -54,6 +54,15 @@ class Agent:
         return action
     
     def handle_faulty_sensors(self, state):
+
+        for i in range(1, 9):
+            if state[i] == -1:
+                if (i in [1, 5] and state[0] == 2) \
+                or (i in [2, 6] and state[0] == 0) \
+                or (i in [3, 7] and state[0] == 3) \
+                or (i in [4, 8] and state[0] == 1):
+                    state[i] == 0
+
         for i in range(1, 9):
             if state[i] == -1 and self.prev_state != None:
                 state[i] = self.prev_state[i] + 6 + 6 * self.prev_action_was_flip if self.prev_state[i] != 0 else -1
