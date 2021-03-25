@@ -3,7 +3,6 @@ import random
 YELLOW_TIME = 6
 TOTAL_HOLD = 12
 sigma = 20
-alpha = 2
 taw = 7
 
 
@@ -24,7 +23,7 @@ class Agent:
         
         self.curr_state = self.handle_faulty_sensors(state)
         
-        #print('##################################### state:', state)
+        print(self.curr_state)
 
         self.time_counter += 1
 
@@ -37,7 +36,7 @@ class Agent:
         self.prev_action_was_flip = True if self.prev_action != None and self.prev_action != self.action else False
         self.prev_action = self.action
 
-
+        print('-----------', self.action, '-----------')
         return self.action
 
 
@@ -54,8 +53,6 @@ class Agent:
             return self.action
 
         action = lane_weights.index(max(lane_weights))
-        #print('************************************ action:', action)
-
         return action
     
     def handle_faulty_sensors(self, state):
@@ -69,9 +66,18 @@ class Agent:
                     state[i] = 0
 
         for i in range(1, 9):
+            if state[i] == -1 and self.prev_state == None:
+                state[i] = 0
+                return state
             if state[i] == -1 and self.prev_state != None:
-                state[i] = self.prev_state[i] + 6 + 6 * int(self.prev_action_was_flip) if self.prev_state[i] != 0 else -1
-            if state[i] == -1:
-                state[i] = 0 if i >= 5 or state[i + 4] == 0 else state[i + 4] + alpha
+                if i >= 5 and state[i - 4] == 0:
+                    state[i] = 0
+                    return state
+                if i >= 5 and state[i - 4] != 0 and self.prev_state[i] == 0:
+                    state[i] = 0
+                    return state
+                if self.prev_state[i] != 0:
+                    state[i] = self.prev_state[i] + 6 + 6 * int(self.prev_action_was_flip)
+                    return state
 
         return state
