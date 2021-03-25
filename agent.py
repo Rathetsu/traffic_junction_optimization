@@ -4,7 +4,7 @@ YELLOW_TIME = 6
 TOTAL_HOLD = 12
 sigma = 3
 alpha = 2
-taw = 6
+taw = 7
 
 
 class Agent:
