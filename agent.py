@@ -10,26 +10,33 @@ taw = 7
 class Agent:
 
     def __init__(self):
-        self.action = None
         self.time_counter = 0
+        self.prev_state = None
+        self.curr_state = None
+        self.prev_action = None
+        self.action = None
+        self.prev_action_was_flip = False
 
     def select_action(self, state):
 
         if self.action == None:
             self.action = state[0]
         
-        for i in range(1, 9):
-            if state[i] == -1:
-                state[i] = 0 if i >=5 or state[i + 4] == 0 else state[i + 4] + alpha
+        self.curr_state = self.handle_faulty_sensors(state)
         
         #print('##################################### state:', state)
 
         self.time_counter += 1
 
         if self.time_counter == taw:
-            self.action = self.act(state)
+            self.action = self.act(self.curr_state)
             self.time_counter = 0
         
+        self.prev_state = self.curr_state
+        self.prev_action_was_flip = True if self.prev_action != None and self.prev_action != self.action else False
+        self.prev_action = self.action
+
+
         return self.action
 
 
@@ -43,29 +50,14 @@ class Agent:
         lane_weights = [N, E, S, W]
         action = lane_weights.index(max(lane_weights))
         #print('************************************ action:', action)
+
         return action
-
-
-    '''
-    def get_busy(state):
+    
+    def handle_faulty_sensors(self, state):
         for i in range(1, 9):
+            if state[i] == -1 and self.prev_state != None:
+                state[i] = self.prev_state[i] + 6 + 6 * self.prev_action_was_flip if self.prev_state[i] != 0 else -1
             if state[i] == -1:
-                state[i] = 0
-        north = state[1] + state[5]
-        south = state[2] + state[6]
-        west = state[4] + state[8]
-        east = state[3] + state[7]
-        lanes = [south, west, north, east]
-        return lanes.index(max(lanes))
+                state[i] = 0 if i >= 5 or state[i + 4] == 0 else state[i + 4] + alpha
 
-    def get_stats(state):
-        for i in range(len(state)):
-            if state[i] == -1:
-                state[i] = 0
-        north = state[1] + state[5]
-        south = state[2] + state[6]
-        west = state[4] + state[8]
-        east = state[3] + state[7]
-        return [south, west, north, east]
-    '''
-
+        return state
