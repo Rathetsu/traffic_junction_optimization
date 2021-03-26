@@ -2,7 +2,7 @@ import random
 
 YELLOW_TIME = 6
 TOTAL_HOLD = 12
-sigma = 30
+sigma = 20
 taw = 7
 
 
