@@ -4,6 +4,7 @@ YELLOW_TIME = 6
 TOTAL_HOLD = 12
 sigma = 20
 taw = 7
+zeta = 4
 
 
 class Agent:
@@ -25,7 +26,13 @@ class Agent:
 
         #print(self.curr_state)
 
+        single_wt = self.is_single_wt(self.curr_state)
+
         self.time_counter += 1
+
+        if self.time_counter == zeta and single_wt:
+            self.time_counter = 0
+            self.action = self.act(self.curr_state)
 
         if self.time_counter >= taw:
             self.action = self.act(self.curr_state)
@@ -82,3 +89,15 @@ class Agent:
     def max_close(self, state):
         close_detectors = state[1:5]
         return max(close_detectors)
+
+    def is_single_wt(self, state):
+        ## Checks if there is only one lane with wait time out the closed three
+        lanes = state[1:5]
+        has_wt = 0
+        for lane in lanes:
+            if lane > 0:
+                has_wt += 1
+        return has_wt == 1
+            
+
+
