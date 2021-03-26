@@ -73,7 +73,7 @@ class Agent:
                 or (action == 1 and state[7] == 0) \
                 or (action == 2 and state[6] == 0) \
                 or (action == 3 and state[8] == 0):
-            self.taw = 3
+            self.taw = 4
         else:
             self.taw = 7
 
